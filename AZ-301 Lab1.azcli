@@ -1,0 +1,53 @@
+# Managing Security and Identity for Azure Solutions
+
+## Exercise 1: Deploy Key Vault resources
+
+### Task 1: Open Cloud Shell (Bash)
+
+az account list
+
+# Task 2: Deploy a key vault
+
+# https://docs.microsoft.com/en-us/cli/azure/keyvault?view=azure-cli-latest#az-keyvault-create
+
+az account list-locations -o table
+Location="westeurope"
+
+RgName="AADesignLab0901-RG"
+az group create --name $RgName --location $Location
+
+az provider show --namespace Microsoft.KeyVault -o table
+# if not registerd:
+# az provider register --namespace Microsoft.KeyVault
+
+KeyVaultName="sinsheimkeyvault2"
+az keyvault create --name $KeyVaultName --location $Location --resource-group $RgName --sku standard
+az keyvault list -o table
+az keyvault show --name $KeyVaultName 
+
+### Task 3: Add a secret to a key vault by using the Azure portal
+
+In the hub menu in the Azure portal, click Resource groups.
+On the Resource groups blade, click AADesignLab0901-RG.
+On the AADesignLab0901-RG blade, click the entry representing the newly created key vault.
+On the key vault blade, click Secrets.
+On the key vault secrets blade, click the Generate/Import button at the top of the pane.
+On the Create a secret blade, perform the following tasks:
+    In the Upload options drop-down list, ensure that the Manual entry is selected.
+    In the Name text-box, type thirdPartyKey.
+    In the Value text box, enter the value 56d95961e597ed0f04b76e58.
+    Leave all remaining settings with their default values.
+    Click the Create button.
+
+### Task 4: Open Cloud Shell (Bash)
+
+### Task 5: Add a secret to a key vault using the CLI
+
+RESOURCE_GROUP='AADesignLab0901-RG'
+KEY_VAULT_NAME=$(az keyvault list --resource-group $RESOURCE_GROUP --query "[0].name" --output tsv)
+az keyvault secret list --vault-name $KEY_VAULT_NAME
+az keyvault secret show --vault-name $KEY_VAULT_NAME --name thirdPartyKey --query value --output tsv
+az keyvault secret set --vault-name $KEY_VAULT_NAME --name firstPartyKey --value 56f8a55119845511c81de488
+az keyvault secret list --vault-name $KEY_VAULT_NAME --query "[*].{Id:id,Created:attributes.created}" --out table
+
+### Task 6: Add secrets to a key vault by using Azure Resource Manager templates
