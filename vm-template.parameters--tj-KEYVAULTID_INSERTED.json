@@ -1,0 +1,14 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "password": {
+            "reference": {
+                "keyVault": {
+                    "id": "\/subscriptions\/ffcb38a5-8428-40c4-98b7-77013eac7ec5\/resourceGroups\/AADesignLab0901-RG\/providers\/Microsoft.KeyVault\/vaults\/SinsheimKeyVault1"
+                },
+                "secretName": "vmPassword"
+            }
+        }
+    }
+}

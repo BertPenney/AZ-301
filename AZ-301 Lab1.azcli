@@ -75,4 +75,41 @@ echo $KEY_VAULT_ID_REGEX
 
 ### Task 2: Prepare the Azure Resource Manager deployment template and parameters files
 
-# vm-template.json   not available :-(
+# vm-template.json   try the old 20535 Lab 9
+
+cat ~/vm-template.parameters--tj-KEYVAULTID_INSERTED.json
+
+### Task 3: Configure a key vault for deployment of Azure Resource Manager templates
+
+### Task 4: Deploy a Linux VM with the password paramter set by using a key vault secret
+
+az group deployment create  --resource-group $RESOURCE_GROUP \
+                            --template-file ~/vm-template--tj.json \
+                            --parameters @~/vm-template.parameters--tj-KEYVAULTID_INSERTED.json
+
+
+### Task 5: Verify the outcome of the deployment
+
+RESOURCE_GROUP='AADesignLab0901-RG'
+KEY_VAULT_NAME=$(az keyvault list --resource-group $RESOURCE_GROUP --query "[0].name" --output tsv)
+echo $KEY_VAULT_NAME
+
+az keyvault secret show --vault-name $KEY_VAULT_NAME --name vmPassword --query value --output tsv
+
+PUBLIC_IP=$(az network public-ip list --resource-group $RESOURCE_GROUP --query "[0].ipAddress" --output tsv)
+echo $PUBLIC_IP
+
+ssh Student@$PUBLIC_IP
+exit
+
+
+## Exercise 3: Remove lab resources
+
+### Task 1: Open Cloud Shell
+
+az group list --query "[?starts_with(name,'AADesignLab09')]".name --output tsv
+
+### Task 2: Delete resource groups
+
+az group list --query "[?starts_with(name,'AADesignLab09')]".name --output tsv \
+  | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
