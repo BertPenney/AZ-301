@@ -1,0 +1,20 @@
+az account list -o table
+
+pwd
+mkdir ~/.npm-global
+
+npm --help
+npm config set prefix '~./npm-global'
+npm config list
+
+cat ~/.bashrc
+echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.bashrc
+tail -3 ~/.bashrc
+
+npm install -g @mspnp/azure-building-blocks
+exit
+
+git --version
+git clone https://github.com/mspnp/template-building-blocks.git
+
+cat ./template-building-blocks/scenarios/vnet/vnet-simple.json
