@@ -4,7 +4,7 @@ pwd
 mkdir ~/.npm-global
 
 npm --help
-npm config set prefix '~./npm-global'
+npm config set prefix '~/.npm-global'
 npm config list
 
 cat ~/.bashrc
@@ -18,3 +18,14 @@ git --version
 git clone https://github.com/mspnp/template-building-blocks.git
 
 cat ./template-building-blocks/scenarios/vnet/vnet-simple.json
+
+SUBSCRIPTION_ID=$(az account list --query "[0].id" | tr -d '"')
+echo $SUBSCRIPTION_ID
+
+RESOURCE_GROUP='AADesignLab0202-RG'
+echo $RESOURCE_GROUP
+
+LOCATION=$(az group list --query "[?name == 'AADesignLab0201-RG'].location" --output tsv)
+echo $LOCATION
+
+azbb -g $RESOURCE_GROUP -s $SUBSCRIPTION_ID -l $LOCATION -p ./template-building-blocks/scenarios/vnet/vnet-simple.json --deploy
